@@ -1,0 +1,25 @@
+
+@baseUrl = http://localhost:5001/api/groups/
+
+GET {{baseUrl}}
+###
+
+POST {{baseUrl}} HTTP/1.1
+Content-Type: application/json 
+
+{
+    "name": "Group A",
+    "tournament_id": 1,
+    "capacity": 4
+}
+###
+
+PATCH {{baseUrl}}5 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Updated Group A"
+}
+###
+
+DELETE {{baseUrl}}5
