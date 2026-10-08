@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import pool from './config/db.js';
 
 import router from './routers/index.js';
 import { errorHandler } from './middleware/index.js';

@@ -56,7 +56,7 @@ class TournamentController {
             const newTournament = await db.query(
                 `
                 INSERT INTO tournaments
-                (name, starts_at, location, tables_count, competition_type, bracket_format, best_of, max_participants, is_rated, rating_coeff, age_category, rating_limit, gender, status)
+                (name, starts_at, location, tables_count, competition_type, bracket_format, best_of, max_participants, is_rated, rating_coefficient, age_category, rating_limit, gender, status)
                 VALUES 
                 ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
                 RETURNING *
@@ -86,9 +86,10 @@ class TournamentController {
     }
 
     async updateTournament(req, res, next) {
+        const { id } = req.params;
+        console.log(req.body)
         try {
             const {
-                id,
                 name,
                 startsAt,
                 location,
@@ -107,21 +108,21 @@ class TournamentController {
 
             const updatedTournament = await db.query(
                 `
-                UPDATE torunaments
+                UPDATE tournaments
                 SET
-                name=$1
-                starts_at=$2
-                location=$3
-                tables_count=$4
-                competition_type=$5
-                bracket_format=$6
-                best_of=$7
-                max_participants=$8
-                is_rated=$9
-                rating_coeff=$10
-                age_category=$11
-                rating_limit=$12
-                gender=$13
+                name=$1,
+                starts_at=$2,
+                location=$3,
+                tables_count=$4,
+                competition_type=$5,
+                bracket_format=$6,
+                best_of=$7,
+                max_participants=$8,
+                is_rated=$9,
+                rating_coefficient=$10,
+                age_category=$11,
+                rating_limit=$12,
+                gender=$13,
                 status=$14
                 WHERE id=$15
                 RETURNING *
