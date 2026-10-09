@@ -1,6 +1,30 @@
 import db from '../config/db.js';
 import { toCamelCase } from '../utils/toCamelCase.js';
 
+const mapCompetitionType = (type) => {
+    switch (type) {
+        case 'team':
+            return 'Team';
+        case 'double':
+            return 'Double';
+        case 'single':
+        default:
+            return 'Single';
+    }
+};
+
+const mapBracketFormat = (format) => {
+    switch (format) {
+        case 'round_robin':
+            return 'Round Robin';
+        case 'swiss':
+            return 'Swiss System';
+        case 'single_elimination':
+        default:
+            return 'Single Elimination';
+    }
+};
+
 class TournamentController {
     async getTournaments(req, res, next) {
         try {
@@ -35,23 +59,28 @@ class TournamentController {
     }
 
     async createTournament(req, res, next) {
+        console.log(req.body)
         try {
             const {
                 name,
                 startsAt,
                 location,
                 tablesCount,
-                competitionType,
-                bracketFormat,
-                matchFormat,
+                status,
+                tournamentType,
+                format,
+                bestOf,
                 maxParticipants,
                 isRated,
                 ratingCoefficient,
                 ageCategory,
                 ratingLimit,
                 gender,
-                status,
+                playersIds,
             } = req.body;
+
+            const competitionType = mapCompetitionType(tournamentType);
+            const bracketFormat = mapBracketFormat(format);
 
             const newTournament = await db.query(
                 `
@@ -68,7 +97,7 @@ class TournamentController {
                     tablesCount,
                     competitionType,
                     bracketFormat,
-                    matchFormat,
+                    bestOf,
                     maxParticipants,
                     isRated,
                     ratingCoefficient,
@@ -86,25 +115,28 @@ class TournamentController {
     }
 
     async updateTournament(req, res, next) {
-        const { id } = req.params;
-        console.log(req.body)
         try {
+            const { id } = req.params;
             const {
                 name,
                 startsAt,
                 location,
                 tablesCount,
-                competitionType,
-                bracketFormat,
-                matchFormat,
+                status,
+                tournamentType,
+                format,
+                bestOf,
                 maxParticipants,
                 isRated,
                 ratingCoefficient,
                 ageCategory,
                 ratingLimit,
                 gender,
-                status,
+                playersIds,
             } = req.body;
+
+            const competitionType = mapCompetitionType(tournamentType);
+            const bracketFormat = mapBracketFormat(format);
 
             const updatedTournament = await db.query(
                 `
@@ -134,7 +166,7 @@ class TournamentController {
                     tablesCount,
                     competitionType,
                     bracketFormat,
-                    matchFormat,
+                    bestOf,
                     maxParticipants,
                     isRated,
                     ratingCoefficient,
