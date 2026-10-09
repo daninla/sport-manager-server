@@ -1,0 +1,54 @@
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+
+GET {{baseUrl}}/matches HTTP/1.1
+
+
+# @name createMatch
+POST {{baseUrl}}/matches HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "tournament_id": 11,
+  "stage": "Quarterfinal",
+  "group_id": null,
+  "round": 1,
+  "player1_id": 1,
+  "player2_id": 2,
+  "status": "upcoming",
+  "starts_at": "2026-10-15T14:00:00.000Z",
+  "table_number": 3
+}
+
+### Збереження ID створеного матчу для наступних запитів
+@matchId = {{createMatch.response.body.id}}
+
+### 3. Отримати створений матч за ID
+GET {{baseUrl}}/matches/{{matchId}} HTTP/1.1
+
+### 4. Оновити матч частково (PATCH - зміна статусу та рахунку)
+PATCH {{baseUrl}}/matches/{{matchId}} HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "status": "in_progress",
+  "current_set": 1,
+  "duration_seconds": 120
+}
+
+### 5. Завершити матч (PATCH - призначити переможця)
+PATCH {{baseUrl}}/matches/{{matchId}} HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+  "status": "finished",
+  "winner_id": 1,
+  "sets": [
+    {"set": 1, "score1": 11, "score2": 9},
+    {"set": 2, "score1": 11, "score2": 7}
+  ]
+}
+
+
+DELETE {{baseUrl}}/matches/{{matchId}} HTTP/1.1
+
