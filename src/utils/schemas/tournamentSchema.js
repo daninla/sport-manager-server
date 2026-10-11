@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const tournamentSchema = z.object({
-    name: z.string().trim().min(1, 'This field is required'),
+    name: z.string().trim().min(1, 'The name is required'),
     startsAt: z.iso.datetime(),
     location: z.string().trim(),
     tablesCount: z.number().int().positive('The number of available standing tables must be a positive integer'),
