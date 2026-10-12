@@ -4,8 +4,12 @@ export function validate(schema) {
       await schema.parseAsync(req.body);
       next();
     } catch (err) {
-      res.status(400).json("Помилка валідації", {
-        error: err.issues.map((issue) => issue.message).join(", "),
+      res.status(400).json({
+        error: "Помилка валідації",
+        details: err.issues.map((issue) => ({
+          path: issue.path.join(".") || "(объект запроса)",
+          message: issue.message,
+        })),
       });
     }
   };
