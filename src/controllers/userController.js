@@ -46,7 +46,6 @@ class User {
 
   async updateUser(req, res, next) {
     try {
-      console.log('putController', req.body);
       const { id, email, password_hash, role, player_id, created_at } = req.body;
       const updatedUser = await db.query(
         `

@@ -1,6 +1,7 @@
 import * as Zod from 'zod';
 
 export const PLAYER_VALIDATION_SCHEMA = Zod.object({
+  id: Zod.number().min(0).optional(),
   first_name: Zod.string().trim().min(2),
   last_name: Zod.string().trim().min(1),
   birth_date: Zod.date().min(new Date()).optional(),
@@ -10,5 +11,5 @@ export const PLAYER_VALIDATION_SCHEMA = Zod.object({
   world_rating: Zod.number().min(0).optional(),
   club: Zod.string().trim().min(1).optional(),
   notes: Zod.string().trim().array().optional(),
-  created_at: Zod.date().min(new Date()).optional(),
+  created_at: Zod.coerce.date(),
 });

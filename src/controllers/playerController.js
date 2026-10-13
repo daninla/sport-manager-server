@@ -79,23 +79,21 @@ class Player {
     }
   }
 
-  async updatePlayer() {
+  async updatePlayer(req, res, next) {
     try {
       const {
-        params: {
-          player_Id,
-          first_name,
-          last_name,
-          birth_date,
-          city,
-          rank_category,
-          ukr_rating,
-          world_rating,
-          club,
-          notes,
-          created_at,
-        },
-      } = req;
+        id,
+        first_name,
+        last_name,
+        birth_date,
+        city,
+        rank_category,
+        ukr_rating,
+        world_rating,
+        club,
+        notes,
+        created_at,
+      } = req.body;
       const updatedPlayer = await db.query(
         `
         UPDATE players
@@ -113,7 +111,7 @@ class Player {
         WHERE id = $1
         RETURNING *;`,
         [
-          player_Id,
+          id,
           first_name,
           last_name,
           birth_date,
@@ -126,6 +124,7 @@ class Player {
           created_at,
         ],
       );
+      res.json(updatedPlayer.rows[0]);
     } catch (error) {
       next(error);
     }

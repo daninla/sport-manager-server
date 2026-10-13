@@ -15,10 +15,8 @@ export const validatePlayer = async (req, res, next) => {
 
 export const validateUser = async (req, res, next) => {
   try {
-    console.log('validation1', req.body);
     const validatedBody = await USER_VALIDATION_SCHEMA.parse(req.body);
     req.body = validatedBody;
-    console.log('validation2', req.body);
     next();
   } catch (error) {
     next(error);
