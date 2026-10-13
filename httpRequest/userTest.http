@@ -1,0 +1,20 @@
+@baseUrl = http://localhost:5000/api/users
+
+GET {{baseUrl}}
+###
+
+GET {{baseUrl}}/1
+###
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "email": "test_email2@email.com",
+  "password_hash": "test_hash",
+  "role": "user",
+  "created_at": "2026-10-10T21:26:00"
+}
+###
+
+PUT {{baseUrl}}/2

@@ -3,7 +3,7 @@ import cors from 'cors';
 
 import routes from './routers/index.js';
 import {
-  ValidationErrorHandler,
+  validationErrorHandler,
   errorHandler,
 } from './middleware/errorHandlers.js';
 
@@ -12,7 +12,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api', routes);
-app.use(ValidationErrorHandler);
-app.use(errorHandler);
+app.use(validationErrorHandler, errorHandler);
 
 export default app;

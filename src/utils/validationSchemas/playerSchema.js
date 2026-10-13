@@ -1,7 +1,6 @@
 import * as Zod from 'zod';
 
 export const PLAYER_VALIDATION_SCHEMA = Zod.object({
-  id: Zod.number().min(0),
   first_name: Zod.string().trim().min(2),
   last_name: Zod.string().trim().min(1),
   birth_date: Zod.date().min(new Date()).optional(),

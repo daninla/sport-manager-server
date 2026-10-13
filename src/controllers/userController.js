@@ -28,6 +28,7 @@ class User {
 
   async createUser(req, res, next) {
     try {
+      console.log('create controller', req.body);
       const { email, password_hash, role, player_id, created_at } = req.body;
       const createdUser = await db.query(
         `
