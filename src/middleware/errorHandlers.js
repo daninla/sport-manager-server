@@ -5,7 +5,7 @@ export const validationErrorHandler = (error, req, res, next) => {
   if (error instanceof ZodError) {
     return res
     .status(400)
-    .send({ errors: [{ title: 'Validation error', details: error.errors }] });
+    .send({ errors: [{ title: 'Validation error', details: error.issues }] });
   }
   next(error);
 };

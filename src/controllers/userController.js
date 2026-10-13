@@ -28,7 +28,6 @@ class User {
 
   async createUser(req, res, next) {
     try {
-      console.log('create controller', req.body);
       const { email, password_hash, role, player_id, created_at } = req.body;
       const createdUser = await db.query(
         `
@@ -47,8 +46,8 @@ class User {
 
   async updateUser(req, res, next) {
     try {
-      const { id, email, password_hash, role, player_id, created_at } =
-        req.body;
+      console.log('putController', req.body);
+      const { id, email, password_hash, role, player_id, created_at } = req.body;
       const updatedUser = await db.query(
         `
         UPDATE users

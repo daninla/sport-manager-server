@@ -9,7 +9,7 @@ export const validatePlayer = async (req, res, next) => {
     req.body = validatedBody;
     next();
   } catch (error) {
-    next(`Error is ${error.errors}`);
+    next(error);
   }
 };
 
@@ -21,6 +21,6 @@ export const validateUser = async (req, res, next) => {
     console.log('validation2', req.body);
     next();
   } catch (error) {
-    next(`Error is ${error.errors}`);
+    next(error);
   }
 };
