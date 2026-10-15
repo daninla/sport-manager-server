@@ -4,11 +4,18 @@ import {
   createGroupRecord,
   updateGroupRecord,
   deleteGroupRecord,
+  getUnassignedTournamentPlayers,
 } from "../services/groupsService.js";
 
 export const getGroups = async (req, res, next) => {
   try {
-    const groups = await getGroupsWithPlayers();
+    const { tournamentId } = req.query;
+
+    if (!tournamentId) {
+      return res.status(400).json({ message: "tournamentId обязателен" });
+    }
+
+    const groups = await getGroupsWithPlayers(tournamentId);
     res.json(groups);
   } catch (err) {
     console.error(err);
@@ -41,7 +48,7 @@ export const createGroup = async (req, res, next) => {
 
 export const updateGroup = async (req, res, next) => {
   try {
-    const group = await updateGroupRecord(req.body);
+    const group = await updateGroupRecord({ ...req.body, id: req.params.id });
     if (!group) {
       return res.status(404).send("Group not found");
     }
@@ -61,6 +68,19 @@ export const deleteGroup = async (req, res, next) => {
     res.json({ message: "Group deleted successfully" });
   } catch (err) {
     console.error(err);
+    next(err);
+  }
+};
+
+export const getAvailablePlayers = async (req, res, next) => {
+  try {
+    const { tournamentId, groupId } = req.query;
+
+    const players = await getUnassignedTournamentPlayers(tournamentId, groupId);
+
+    res.set("Cache-Control", "no-store");
+    res.status(200).json(players);
+  } catch (err) {
     next(err);
   }
 };
