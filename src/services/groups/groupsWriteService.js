@@ -185,3 +185,84 @@ export const deleteGroupRecord = async (id) => {
     client.release();
   }
 };
+////////////////////////////////////////
+
+export const randomCreateGroupRecord = async ({
+  tournamentId,
+  name = "Група",
+  capacity,
+}) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const { rows } = await client.query(
+      `
+        SELECT r.player_id AS id
+        FROM registrations r
+        WHERE r.tournament_id = $1
+          AND NOT EXISTS (
+            SELECT 1
+            FROM group_players gp
+            JOIN groups g ON g.id = gp.group_id
+            WHERE gp.player_id = r.player_id
+              AND g.tournament_id = $1
+          )
+      `,
+      [tournamentId],
+    );
+
+    if (rows.length === 0) {
+      const err = new Error("Нет доступных игроков для создания группы");
+      err.status = 400;
+      throw err;
+    }
+
+    // Перемешиваем игроков
+    const playerIds = rows.map(({ id }) => id);
+
+    for (let i = playerIds.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [playerIds[i], playerIds[j]] = [playerIds[j], playerIds[i]];
+    }
+
+    const createdGroups = [];
+
+    // Создаём группы и назначаем игроков
+    for (let offset = 0; offset < playerIds.length; offset += capacity) {
+      const index = createdGroups.length;
+      const groupName = `${name.trim()} ${String.fromCharCode(65 + index)}`;
+
+      const { rows: [group] } = await client.query(
+        `
+          INSERT INTO groups (name, tournament_id, capacity)
+          VALUES ($1, $2, $3)
+          RETURNING *
+        `,
+        [groupName, tournamentId, capacity],
+      );
+
+      const groupPlayerIds = playerIds.slice(offset, offset + capacity);
+
+      await client.query(
+        `
+          INSERT INTO group_players (group_id, player_id)
+          SELECT $1, unnest($2::bigint[])
+        `,
+        [group.id, groupPlayerIds],
+      );
+
+      createdGroups.push(camelizeKeys(group));
+    }
+
+    await client.query("COMMIT");
+
+    return createdGroups;
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
+};

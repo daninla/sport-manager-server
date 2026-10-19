@@ -5,6 +5,7 @@ import {
   updateGroupRecord,
   deleteGroupRecord,
   getUnassignedTournamentPlayers,
+  randomCreateGroupRecord,
 } from "../services/groupsService.js";
 
 export const getGroups = async (req, res, next) => {
@@ -81,6 +82,16 @@ export const getAvailablePlayers = async (req, res, next) => {
     res.set("Cache-Control", "no-store");
     res.status(200).json(players);
   } catch (err) {
+    next(err);
+  }
+};
+
+export const randomCreateGroup = async (req, res, next) => {
+  try {
+    const group = await randomCreateGroupRecord(req.body);
+    res.json(group);
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 };
