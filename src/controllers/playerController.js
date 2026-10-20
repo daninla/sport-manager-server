@@ -38,7 +38,6 @@ class Player {
         city,
         rank_category,
         ukr_rating,
-        world_rating,
         club,
         notes,
         created_at,
@@ -52,12 +51,11 @@ class Player {
         city,
         rank_category,
         ukr_rating,
-        world_rating,
         club,
         notes,
         created_at)
         VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;
         `,
         [
@@ -67,7 +65,6 @@ class Player {
           city,
           rank_category,
           ukr_rating,
-          world_rating,
           club,
           notes,
           created_at,
@@ -89,7 +86,6 @@ class Player {
         city,
         rank_category,
         ukr_rating,
-        world_rating,
         club,
         notes,
         created_at,
@@ -104,10 +100,9 @@ class Player {
         city = $5,
         rank_category = $6,
         ukr_rating = $7,
-        world_rating = $8,
-        club = $9,
-        notes = $10,
-        created_at = $11
+        club = $8,
+        notes = $9,
+        created_at = $10
         WHERE id = $1
         RETURNING *;`,
         [
@@ -118,7 +113,6 @@ class Player {
           city,
           rank_category,
           ukr_rating,
-          world_rating,
           club,
           notes,
           created_at,
