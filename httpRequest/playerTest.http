@@ -3,7 +3,7 @@
 GET {{baseUrl}}
 ###
 
-GET {{baseUrl}}/1
+GET {{baseUrl}}/17
 ###
 
 POST {{baseUrl}}
@@ -12,7 +12,7 @@ Content-Type: application/json
 {
   "first_name": "test",
   "last_name": "player",
-  "created_at": "2026-10-10T21:26:00"
+  "ukr_rating": null
 }
 ###
 
@@ -20,11 +20,12 @@ PUT {{baseUrl}}
 Content-Type: application/json
 
 {
-  "id": 8,
+  "id": 17,
   "first_name": "test2",
   "last_name": "player2",
-  "created_at": "2026-10-10T21:26:00"
+  "ukr_rating": 20, 
+  "updated_at": "2026-10-20T22:30:07.657Z"
 }
 ###
 
-DELETE {{baseUrl}}/8
+DELETE {{baseUrl}}/17

@@ -36,7 +36,13 @@ class User {
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
         `,
-        [email, password_hash, role, player_id, created_at],
+        [
+          email, // $1
+          password_hash, // $2
+          role, // $3
+          player_id, // $4
+          created_at, // $5
+        ],
       );
       res.json(createdUser.rows[0]);
     } catch (error) {
@@ -46,7 +52,8 @@ class User {
 
   async updateUser(req, res, next) {
     try {
-      const { id, email, password_hash, role, player_id, created_at } = req.body;
+      const { id, email, password_hash, role, player_id, created_at } =
+        req.body;
       const updatedUser = await db.query(
         `
         UPDATE users
@@ -59,7 +66,14 @@ class User {
         WHERE id = $1
         RETURNING *;
         `,
-        [id, email, password_hash, role, player_id, created_at],
+        [
+          id, // $1
+          email, // $2
+          password_hash, // $3
+          role, // $4
+          player_id, // $5
+          created_at, // $6
+        ],
       );
       res.json(updatedUser.rows[0]);
     } catch (error) {
@@ -74,7 +88,7 @@ class User {
         `
         DELETE FROM users
         WHERE id = $1
-        RETURNING *;
+        RETURNING id;
         `,
         [userId],
       );

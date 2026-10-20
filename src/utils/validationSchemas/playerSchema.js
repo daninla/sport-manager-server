@@ -7,8 +7,8 @@ export const PLAYER_VALIDATION_SCHEMA = Zod.object({
   birth_date: Zod.date().min(new Date()).optional(),
   city: Zod.string().trim().min(10).optional(),
   rank_category: Zod.string().trim().min(2).max(5).optional(),
-  ukr_rating: Zod.number().min(0).optional(),
+  ukr_rating: Zod.number().min(1).nullable(),
   club: Zod.string().trim().min(1).optional(),
   notes: Zod.string().trim().array().optional(),
-  created_at: Zod.coerce.date(),
+  updated_at: Zod.coerce.date().nullish(),
 });

@@ -13,7 +13,6 @@ Content-Type: application/json
   "email": "test_email2@email.com",
   "password_hash": "test_hash2",
   "role": "user",
-  "created_at": "2026-10-10T21:26:00"
 }
 ###
 
@@ -25,7 +24,6 @@ Content-Type: application/json
   "email": "test_email@email.com",
   "password_hash": "test_hash",
   "role": "user",
-  "created_at": "2026-10-10T21:26:00"
 }
 ###
 
