@@ -17,7 +17,7 @@ groupsRouter.get("/", getGroups);
 groupsRouter.get("/available-players", getAvailablePlayers);
 groupsRouter.get("/:id", getGroupById);
 groupsRouter.post("/", validate(groupSchema), createGroup);
-groupsRouter.post("/random", validate(groupSchema), randomCreateGroup);
+groupsRouter.post("/random", randomCreateGroup);
 groupsRouter.patch("/:id", validate(groupUpdateSchema), updateGroup);
 groupsRouter.delete("/:id", deleteGroup);
 

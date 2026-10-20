@@ -1,5 +1,6 @@
 import pool from "../../config/db.js";
 import { camelizeKeys } from "./camelize.js";
+import { getGroupByIdRecord } from "./groupsReadService.js";
 
 export const createGroupRecord = async ({
   name,
@@ -152,7 +153,7 @@ export const updateGroupRecord = async ({ id, name, capacity, playerIds }) => {
     }
 
     await client.query("COMMIT");
-    return id;
+    return getGroupByIdRecord(id);
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
@@ -187,11 +188,7 @@ export const deleteGroupRecord = async (id) => {
 };
 ////////////////////////////////////////
 
-export const randomCreateGroupRecord = async ({
-  tournamentId,
-  name = "Група",
-  capacity,
-}) => {
+export const randomCreateGroupRecord = async ({ tournamentId, capacity }) => {
   const client = await pool.connect();
 
   try {
@@ -232,9 +229,11 @@ export const randomCreateGroupRecord = async ({
     // Создаём группы и назначаем игроков
     for (let offset = 0; offset < playerIds.length; offset += capacity) {
       const index = createdGroups.length;
-      const groupName = `${name.trim()} ${String.fromCharCode(65 + index)}`;
+      const groupName = `${String.fromCharCode(65 + index)}`;
 
-      const { rows: [group] } = await client.query(
+      const {
+        rows: [group],
+      } = await client.query(
         `
           INSERT INTO groups (name, tournament_id, capacity)
           VALUES ($1, $2, $3)

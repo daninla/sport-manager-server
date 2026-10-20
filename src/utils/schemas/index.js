@@ -2,7 +2,7 @@ import z from "zod";
 
 export const groupSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  capacity: z.number().int().positive("Capacity must be a positive integer"),
+  capacity: z.number().int().min(2, "Capacity must be at least 2"),
 });
 
 export const groupUpdateSchema = z

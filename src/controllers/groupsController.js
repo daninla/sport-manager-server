@@ -11,7 +11,6 @@ import {
 export const getGroups = async (req, res, next) => {
   try {
     const { tournamentId } = req.query;
-
     if (!tournamentId) {
       return res.status(400).json({ message: "tournamentId обязателен" });
     }
@@ -26,6 +25,7 @@ export const getGroups = async (req, res, next) => {
 
 export const getGroupById = async (req, res, next) => {
   try {
+    console.log("GET GROUP BY ID", req.params.id);
     const group = await getGroupByIdRecord(req.params.id);
     if (!group) {
       return res.status(404).send("Group not found");
@@ -76,6 +76,7 @@ export const deleteGroup = async (req, res, next) => {
 export const getAvailablePlayers = async (req, res, next) => {
   try {
     const { tournamentId, groupId } = req.query;
+    console.log("GET AVAILABLE PLAYERS", req.query);
 
     const players = await getUnassignedTournamentPlayers(tournamentId, groupId);
 
