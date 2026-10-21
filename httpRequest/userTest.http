@@ -10,9 +10,10 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "email": "test_email2@email.com",
-  "password_hash": "test_hash2",
-  "role": "user",
+  "login": "test_login",
+  "email": "test_email@email.com",
+  "password_hash": "test_hash",
+  "role": "user"
 }
 ###
 
@@ -20,11 +21,12 @@ PUT {{baseUrl}}
 Content-Type: application/json
 
 {
-  "id": 1,
-  "email": "test_email@email.com",
+  "id": 32,
+  "login": "test_login3",
+  "email": "test_email3@email.com",
   "password_hash": "test_hash",
-  "role": "user",
+  "role": "user"
 }
 ###
 
-DELETE {{baseUrl}}/1
+DELETE {{baseUrl}}/32

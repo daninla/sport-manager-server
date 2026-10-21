@@ -28,20 +28,22 @@ class User {
 
   async createUser(req, res, next) {
     try {
-      const { email, password_hash, role, player_id, created_at } = req.body;
+      const { login, email, password_hash, role, player_id, updated_at } =
+        req.body;
       const createdUser = await db.query(
         `
         INSERT 
-        INTO users (email, password_hash, role, player_id, created_at)
-        VALUES ($1, $2, $3, $4, $5)
+        INTO users (login, email, password_hash, role, player_id, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;
         `,
         [
-          email, // $1
-          password_hash, // $2
-          role, // $3
-          player_id, // $4
-          created_at, // $5
+          login, // $1
+          email, // $2
+          password_hash, // $3
+          role, // $4
+          player_id, // $5
+          updated_at, // $6
         ],
       );
       res.json(createdUser.rows[0]);
@@ -52,27 +54,29 @@ class User {
 
   async updateUser(req, res, next) {
     try {
-      const { id, email, password_hash, role, player_id, created_at } =
+      const { id, login, email, password_hash, role, player_id, updated_at } =
         req.body;
       const updatedUser = await db.query(
         `
         UPDATE users
         SET 
-        email = $2,
-        password_hash = $3, 
-        role = $4,
-        player_id = $5,
-        created_at = $6
+          login = $2,
+          email = $3,
+          password_hash = $4, 
+          role = $5,
+          player_id = $6,
+          updated_at = $7
         WHERE id = $1
         RETURNING *;
         `,
         [
           id, // $1
-          email, // $2
-          password_hash, // $3
-          role, // $4
-          player_id, // $5
-          created_at, // $6
+          login, // $2
+          email, // $3
+          password_hash, // $4
+          role, // $5
+          player_id, // $6
+          updated_at, // $7
         ],
       );
       res.json(updatedUser.rows[0]);
