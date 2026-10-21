@@ -7,5 +7,5 @@ export const USER_VALIDATION_SCHEMA = Zod.object({
   email: Zod.string().trim().toLowerCase().email(),
   password_hash: Zod.string(),
   role: Zod.string().trim().min(1),
-  updated_at: Zod.coerce.date().optional(),
+  updated_at: Zod.coerce.date().nullish(),
 });

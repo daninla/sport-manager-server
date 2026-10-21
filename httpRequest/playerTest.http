@@ -3,28 +3,23 @@
 GET {{baseUrl}}
 ###
 
-GET {{baseUrl}}/18
+GET {{baseUrl}}/24
 ###
 
 POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "first_name": "test",
-  "last_name": "player",
-  "ukr_rating": null
+  "user_email": "test_email3@email.com"
 }
 ###
 
-PUT {{baseUrl}}/18
+PUT {{baseUrl}}/29
 Content-Type: application/json
 
 {
-  "first_name": "test2",
-  "last_name": "player2",
-  "ukr_rating": 20, 
-  "updated_at": "2026-10-20T22:30:07.657Z"
+  "ukr_rating": 10.5
 }
 ###
 
-DELETE {{baseUrl}}/18
+DELETE {{baseUrl}}/29

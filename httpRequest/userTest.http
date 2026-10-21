@@ -10,10 +10,10 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "first_name": "test1", 
-  "last_name": "test1", 
-  "email": "test_email2@email.com",
-  "password_hash": "test_hash",
+  "first_name": "test3", 
+  "last_name": "test3", 
+  "email": "test_email3@email.com",
+  "password_hash": "test_hash3",
   "role": "user"
 }
 ###
