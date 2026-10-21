@@ -14,12 +14,12 @@ Content-Type: application/json
 }
 ###
 
-PUT {{baseUrl}}/29
+PUT {{baseUrl}}/32
 Content-Type: application/json
 
 {
-  "ukr_rating": 10.5
+  "ukr_rating": 10
 }
 ###
 
-DELETE {{baseUrl}}/29
+DELETE {{baseUrl}}/32

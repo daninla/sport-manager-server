@@ -67,7 +67,7 @@ class Player {
         SELECT u.first_name, u.last_name, new_player.*, new_rating.ukr_rating
         FROM new_player
         LEFT JOIN users u ON u.id = new_player.user_id
-        CROSS JOIN new_rating
+        CROSS JOIN new_rating;
         `,
         [
           birth_date, // $1
