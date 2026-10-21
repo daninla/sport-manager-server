@@ -8,12 +8,12 @@ const router = new Router();
 router
   .route('/')
   .get(userController.getUsers)
-  .post(validateUser, userController.createUser)
-  .put(validateUser, userController.updateUser)
-  
-  router
+  .post(validateUser, userController.createUser);
+
+router
   .route('/:userId')
   .get(userController.getUserById)
-  .delete(userController.deleteUser);
+  .delete(userController.deleteUser)
+  .put(validateUser, userController.updateUser);
 
 export default router;

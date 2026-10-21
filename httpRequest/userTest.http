@@ -11,17 +11,16 @@ Content-Type: application/json
 
 {
   "login": "test_login",
-  "email": "test_email@email.com",
+  "email": "test_email2@email.com",
   "password_hash": "test_hash",
   "role": "user"
 }
 ###
 
-PUT {{baseUrl}}
+PUT {{baseUrl}}/34
 Content-Type: application/json
 
 {
-  "id": 32,
   "login": "test_login3",
   "email": "test_email3@email.com",
   "password_hash": "test_hash",
@@ -29,4 +28,4 @@ Content-Type: application/json
 }
 ###
 
-DELETE {{baseUrl}}/32
+DELETE {{baseUrl}}/34

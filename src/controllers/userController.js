@@ -54,7 +54,8 @@ class User {
 
   async updateUser(req, res, next) {
     try {
-      const { id, login, email, password_hash, role, player_id, updated_at } =
+      const { userId } = req.params;
+      const { login, email, password_hash, role, player_id, updated_at } =
         req.body;
       const updatedUser = await db.query(
         `
@@ -70,7 +71,7 @@ class User {
         RETURNING *;
         `,
         [
-          id, // $1
+          userId, // $1
           login, // $2
           email, // $3
           password_hash, // $4

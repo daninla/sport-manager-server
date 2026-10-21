@@ -86,8 +86,8 @@ class Player {
 
   async updatePlayer(req, res, next) {
     try {
+      const { playerId } = req.params;
       const {
-        id,
         first_name,
         last_name,
         birth_date,
@@ -125,7 +125,7 @@ class Player {
         FROM updated_player, updated_rating;
         `,
         [
-          id, // $1
+          playerId, // $1
           first_name, // $2
           last_name, // $3
           birth_date, // $4
