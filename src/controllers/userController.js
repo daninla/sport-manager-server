@@ -28,22 +28,21 @@ class User {
 
   async createUser(req, res, next) {
     try {
-      const { login, email, password_hash, role, player_id, updated_at } =
+      const { first_name, last_name, email, password_hash, role, player_id } =
         req.body;
       const createdUser = await db.query(
         `
         INSERT 
-        INTO users (login, email, password_hash, role, player_id, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INTO users (first_name, last_name, email, password_hash, role)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
         `,
         [
-          login, // $1
-          email, // $2
-          password_hash, // $3
-          role, // $4
-          player_id, // $5
-          updated_at, // $6
+          first_name, // $1
+          last_name, // $2
+          email, // $3
+          password_hash, // $4
+          role, // $5
         ],
       );
       res.json(createdUser.rows[0]);
@@ -55,28 +54,34 @@ class User {
   async updateUser(req, res, next) {
     try {
       const { userId } = req.params;
-      const { login, email, password_hash, role, player_id, updated_at } =
-        req.body;
+      const {
+        first_name,
+        last_name,
+        email,
+        password_hash,
+        role,
+        updated_at,
+      } = req.body;
       const updatedUser = await db.query(
         `
         UPDATE users
         SET 
-          login = $2,
-          email = $3,
-          password_hash = $4, 
-          role = $5,
-          player_id = $6,
+          first_name = $2,
+          last_name = $3,
+          email = $4,
+          password_hash = $5, 
+          role = $6,
           updated_at = $7
         WHERE id = $1
         RETURNING *;
         `,
         [
           userId, // $1
-          login, // $2
-          email, // $3
-          password_hash, // $4
-          role, // $5
-          player_id, // $6
+          first_name, // $2
+          last_name, // $3
+          email, // $4
+          password_hash, // $5
+          role, // $6
           updated_at, // $7
         ],
       );
