@@ -96,6 +96,7 @@ class Player {
         club,
         notes,
         updated_at,
+        user_email,
       } = req.body;
       const updatedPlayer = await db.query(
         `
@@ -107,7 +108,12 @@ class Player {
             rank_category = $4,
             club = $5,
             notes = $6,
-            updated_at = $7
+            updated_at = $7,
+            user_id = (
+              SELECT id 
+              FROM users
+              WHERE email = $9
+            )
           WHERE id = $1
           RETURNING *
         ), updated_rating AS (
@@ -132,6 +138,7 @@ class Player {
           notes, // $6
           updated_at, // $7
           ukr_rating, // $8
+          user_email, // $9
         ],
       );
       res.json(updatedPlayer.rows[0]);
