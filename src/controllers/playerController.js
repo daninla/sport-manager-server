@@ -46,14 +46,15 @@ class Player {
         club,
         notes,
         user_email,
+        sex,
       } = req.body;
       const createdPlayer = await db.query(
         `
         WITH new_player AS (
           INSERT INTO players 
-            (birth_date, city, rank_category, club, notes, user_id)
+            (birth_date, city, rank_category, club, notes, sex, user_id)
           VALUES 
-            ($1, $2, $3, $4, $5, (
+            ($1, $2, $3, $4, $5, $8, (
               SELECT id FROM users u WHERE u.email = $7
             ))
           RETURNING *
@@ -77,6 +78,7 @@ class Player {
           notes, // $5
           ukr_rating, // $6
           user_email, // $7
+          sex, // $8
         ],
       );
       res.json(createdPlayer.rows[0]);
@@ -97,6 +99,7 @@ class Player {
         notes,
         updated_at,
         user_email,
+        sex,
       } = req.body;
       const updatedPlayer = await db.query(
         `
@@ -109,6 +112,7 @@ class Player {
             club = $5,
             notes = $6,
             updated_at = $7,
+            sex = $10,
             user_id = (
               SELECT id 
               FROM users
@@ -139,6 +143,7 @@ class Player {
           updated_at, // $7
           ukr_rating, // $8
           user_email, // $9
+          sex, // $10
         ],
       );
       res.json(updatedPlayer.rows[0]);
