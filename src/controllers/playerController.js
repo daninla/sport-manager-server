@@ -4,7 +4,7 @@ class Player {
   async getPlayers(_, res, next) {
     try {
       const players = await db.query(`
-        SELECT u.first_name, u.last_name, p.*, r.ukr_rating
+        SELECT u.first_name, u.last_name, u.email user_email, p.*, r.ukr_rating
         FROM players p
         LEFT JOIN player_ukr_rating r ON p.id = r.player_id
         LEFT JOIN users u ON p.user_id = u.id;
@@ -22,7 +22,7 @@ class Player {
       } = req;
       const player = await db.query(
         `
-          SELECT u.first_name, u.last_name, p.*, r.ukr_rating 
+          SELECT u.first_name, u.last_name, u.email user_email, p.*, r.ukr_rating 
           FROM players p
           LEFT JOIN player_ukr_rating r ON p.id = r.player_id
           LEFT JOIN users u ON p.user_id = u.id
