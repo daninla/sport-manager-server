@@ -5,6 +5,7 @@ dotenv.config();
 
 const { Pool } = pg;
 
+// Пул pg используется сервисами с прямыми SQL-запросами; это отдельное подключение от Sequelize.
 const pool = new Pool({
   host: process.env.PGHOST,
   port: 5432,
