@@ -1,7 +1,7 @@
 export const errorHandler = (err, req, res, next) => {
   console.error("Unhandled Error:", err);
 
-  switch (err.code) {
+  switch (err.original?.code ?? err.code) {
     case "23505":
       return res.status(409).json({
         error: "Conflict",
