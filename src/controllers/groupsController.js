@@ -4,11 +4,18 @@ import {
   createGroupRecord,
   updateGroupRecord,
   deleteGroupRecord,
+  getUnassignedTournamentPlayers,
+  randomCreateGroupRecord,
 } from "../services/groupsService.js";
 
 export const getGroups = async (req, res, next) => {
   try {
-    const groups = await getGroupsWithPlayers();
+    const { tournamentId } = req.query;
+    if (!tournamentId) {
+      return res.status(400).json({ message: "tournamentId обязателен" });
+    }
+
+    const groups = await getGroupsWithPlayers(tournamentId);
     res.json(groups);
   } catch (err) {
     console.error(err);
@@ -18,6 +25,7 @@ export const getGroups = async (req, res, next) => {
 
 export const getGroupById = async (req, res, next) => {
   try {
+    console.log("GET GROUP BY ID", req.params.id);
     const group = await getGroupByIdRecord(req.params.id);
     if (!group) {
       return res.status(404).send("Group not found");
@@ -41,7 +49,7 @@ export const createGroup = async (req, res, next) => {
 
 export const updateGroup = async (req, res, next) => {
   try {
-    const group = await updateGroupRecord(req.body);
+    const group = await updateGroupRecord({ ...req.body, id: req.params.id });
     if (!group) {
       return res.status(404).send("Group not found");
     }
@@ -59,6 +67,30 @@ export const deleteGroup = async (req, res, next) => {
       return res.status(404).send("Group not found");
     }
     res.json({ message: "Group deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+export const getAvailablePlayers = async (req, res, next) => {
+  try {
+    const { tournamentId, groupId } = req.query;
+    console.log("GET AVAILABLE PLAYERS", req.query);
+
+    const players = await getUnassignedTournamentPlayers(tournamentId, groupId);
+
+    res.set("Cache-Control", "no-store");
+    res.status(200).json(players);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const randomCreateGroup = async (req, res, next) => {
+  try {
+    const group = await randomCreateGroupRecord(req.body);
+    res.json(group);
   } catch (err) {
     console.error(err);
     next(err);
