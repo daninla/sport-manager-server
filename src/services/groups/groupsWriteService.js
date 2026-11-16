@@ -1,5 +1,8 @@
-import db from "../../../database/models/index.js";
-import { getAvailablePlayerIds, getGroupByIdRecord } from "./groupsReadService.js";
+import db from "../../database/models/index.js";
+import {
+  getAvailablePlayerIds,
+  getGroupByIdRecord,
+} from "./groupsReadService.js";
 
 const { Group, GroupPlayer, sequelize } = db;
 
@@ -26,7 +29,10 @@ const createGroupWithPlayers = async (
   { name, tournamentId, capacity, playerIds },
   transaction,
 ) => {
-  const group = await Group.create({ name, tournamentId, capacity }, { transaction });
+  const group = await Group.create(
+    { name, tournamentId, capacity },
+    { transaction },
+  );
   await addGroupPlayers(group.id, playerIds, transaction);
   return group;
 };
@@ -40,7 +46,10 @@ export const createGroupRecord = ({
   validateGroupCapacity(capacity, playerIds.length, "were provided");
 
   return sequelize.transaction((transaction) =>
-    createGroupWithPlayers({ name, tournamentId, capacity, playerIds }, transaction),
+    createGroupWithPlayers(
+      { name, tournamentId, capacity, playerIds },
+      transaction,
+    ),
   );
 };
 
@@ -68,7 +77,11 @@ export const updateGroupRecord = ({ id, name, capacity, playerIds }) =>
         ? await GroupPlayer.count({ where: { groupId: id }, transaction })
         : playerIds.length;
 
-    validateGroupCapacity(capacity === undefined ? group.capacity : capacity, playerCount, "are assigned");
+    validateGroupCapacity(
+      capacity === undefined ? group.capacity : capacity,
+      playerCount,
+      "are assigned",
+    );
     await group.update({ name, capacity }, { transaction });
 
     if (playerIds !== undefined) {
@@ -102,7 +115,9 @@ const shuffle = (items) => {
 
 export const randomCreateGroupRecord = ({ tournamentId, capacity }) =>
   sequelize.transaction(async (transaction) => {
-    const playerIds = await getAvailablePlayerIds(tournamentId, { transaction });
+    const playerIds = await getAvailablePlayerIds(tournamentId, {
+      transaction,
+    });
 
     if (playerIds.length === 0) {
       const err = new Error("Нет доступных игроков для создания группы");

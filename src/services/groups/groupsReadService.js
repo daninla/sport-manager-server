@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import db from "../../../database/models/index.js";
+import db from "../../database/models/index.js";
 
 const { Group, GroupPlayer, Player, Registration } = db;
 
@@ -21,7 +21,10 @@ export const getGroupByIdRecord = (id, transaction) =>
     transaction,
   });
 
-export const getAvailablePlayerIds = async (tournamentId, { groupId, transaction } = {}) => {
+export const getAvailablePlayerIds = async (
+  tournamentId,
+  { groupId, transaction } = {},
+) => {
   if (tournamentId == null) return [];
 
   const registrations = await Registration.findAll({
@@ -39,12 +42,14 @@ export const getAvailablePlayerIds = async (tournamentId, { groupId, transaction
       playerId: { [Op.in]: playerIds },
       ...(groupId == null ? {} : { groupId: { [Op.ne]: groupId } }),
     },
-    include: [{
-      association: "group",
-      attributes: [],
-      required: true,
-      where: { tournamentId },
-    }],
+    include: [
+      {
+        association: "group",
+        attributes: [],
+        required: true,
+        where: { tournamentId },
+      },
+    ],
     raw: true,
     transaction,
   });

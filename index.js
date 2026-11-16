@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import app from "./src/app.js";
 import http from "http";
-import { sequelize } from "./database/models/index.js";
+import { sequelize } from "./src/database/models/index.js";
 
 dotenv.config();
 
