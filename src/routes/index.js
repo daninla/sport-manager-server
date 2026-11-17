@@ -1,5 +1,4 @@
 import { Router } from 'express';
-
 import torunamentRouter from './tournamentRouter.js';
 import playerRouter from './playerRouter.js';
 
