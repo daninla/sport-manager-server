@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import tournamentController from '../controllers/tournamentController.js';
-import { validate } from '../middleware/validation.mw.js';
+import { validate } from '../middlewares/validation.mw.js';
 import { tournamentSchema } from '../utils/schemas/tournamentSchema.js';
 
 const router = new Router();
