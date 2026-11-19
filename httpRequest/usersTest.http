@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:5000/api
+@testPassword = TestPass123!
+
+### Get all users
+# @name getUsers
+GET {{baseUrl}}/users
+Accept: application/json
+
+### Create a user
+# @name createUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "user-{{$guid}}@example.com",
+  "password": "{{testPassword}}",
+  "first_name": "Test",
+  "last_name": "User"
+}
+
+### Get the created user's ID
+@userId = {{createUser.response.body.$.id}}
+
+### Get user by ID
+# @name getUserById
+GET {{baseUrl}}/users/{{userId}}
+Accept: application/json
+
+### Update user
+# @name updateUser
+PATCH {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "first_name": "Updated",
+  "last_name": "User",
+  "email": "updated-{{$guid}}@example.com"
+}
+
+### Try deleting without a password (expected: 400)
+DELETE {{baseUrl}}/users/{{userId}}
+Accept: application/json
+
+### Try deleting with an incorrect password (expected: 401)
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "WrongPassword123!"
+}
+
+### Delete user (requires the correct password; expected: 200)
+# @name deleteUser
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "{{testPassword}}"
+}
+
+### Verify that the user was deleted (expected: 404)
+GET {{baseUrl}}/users/{{userId}}
+Accept: application/json

@@ -1,2 +1,2 @@
-export * from './playerSchema.js'
-export * from './userSchema.js'
+export * from './playerSchemas.js'
+export * from './userSchemas.js'

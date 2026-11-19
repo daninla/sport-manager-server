@@ -1,0 +1,59 @@
+@baseUrl = http://localhost:5000/api
+@testPassword = TestPass123!
+
+### Create a regular user that will be assigned the admin role
+# @name createAdminUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "admin-test-{{$guid}}@example.com",
+  "password": "{{testPassword}}",
+  "first_name": "Test",
+  "last_name": "Admin"
+}
+
+### Get the new user's ID
+@userId = {{createAdminUser.response.body.$.id}}
+
+### Assign the admin role to the existing user
+# @name createAdmin
+POST {{baseUrl}}/admins
+Content-Type: application/json
+Accept: application/json
+
+{
+  "user_id": {{userId}}
+}
+
+### Get the admin's ID (admins use users.id)
+@adminId = {{createAdmin.response.body.$.id}}
+
+### Get all admins
+# @name getAdmins
+GET {{baseUrl}}/admins
+Accept: application/json
+
+### Get admin by ID
+# @name getAdminById
+GET {{baseUrl}}/admins/{{adminId}}
+Accept: application/json
+
+### Remove only the admin role (the user account remains)
+# @name deleteAdmin
+DELETE {{baseUrl}}/admins/{{adminId}}
+Accept: application/json
+
+### Verify that the admin role was removed (expected: 404)
+GET {{baseUrl}}/admins/{{adminId}}
+Accept: application/json
+
+### Delete the test user account (requires the current password)
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "{{testPassword}}"
+}

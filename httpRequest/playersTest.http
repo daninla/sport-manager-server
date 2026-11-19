@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:5000/api
+@testPassword = TestPass123!
+
+### Create a regular user for the player profile
+# @name createPlayerUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "player-test-{{$guid}}@example.com",
+  "password": "{{testPassword}}",
+  "first_name": "Test",
+  "last_name": "Player"
+}
+
+### Get the user ID (players' user_id references users.id)
+@userId = {{createPlayerUser.response.body.$.id}}
+
+### Create a player profile for the user
+# @name createPlayer
+POST {{baseUrl}}/players
+Content-Type: application/json
+Accept: application/json
+
+{
+  "user_id": {{userId}},
+  "ukr_rate": 5.25,
+  "rank_category": "First category",
+  "club": "Test table tennis club",
+  "notes": "Created by playersTest.http",
+  "sex": "male",
+  "birth_date": "2000-05-15",
+  "city": "Lviv"
+}
+
+### Get the player profile ID (playerId is player_profile.id)
+@playerId = {{createPlayer.response.body.$.id}}
+
+### Get all players
+# @name getPlayers
+GET {{baseUrl}}/players
+Accept: application/json
+
+### Get player by ID
+# @name getPlayerById
+GET {{baseUrl}}/players/{{playerId}}
+Accept: application/json
+
+### Update player profile
+# Note: send all profile fields because updatePlayer assigns every field from the request body.
+# @name updatePlayer
+PATCH {{baseUrl}}/players/{{playerId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "ukr_rate": 5.50,
+  "rank_category": "Candidate master",
+  "club": "Updated table tennis club",
+  "notes": "Updated by playersTest.http",
+  "sex": "male",
+  "birth_date": "2000-05-15",
+  "city": "Kyiv"
+}
+
+### Delete the player profile (the user account remains)
+# @name deletePlayer
+DELETE {{baseUrl}}/players/{{playerId}}
+Accept: application/json
+
+### Verify that the player profile was deleted (expected: 404)
+GET {{baseUrl}}/players/{{playerId}}
+Accept: application/json
+
+### Delete the test user account (requires the current password)
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "{{testPassword}}"
+}

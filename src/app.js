@@ -5,7 +5,7 @@ import routes from './routers/index.js';
 import {
   validationErrorHandler,
   errorHandler,
-} from './middleware/errorHandlers.js';
+} from './middleware/errorHandlers.mw.js';
 
 const app = express();
 

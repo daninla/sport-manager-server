@@ -1,0 +1,59 @@
+@baseUrl = http://localhost:5000/api
+@testPassword = TestPass123!
+
+### Create a regular user that will be assigned the judge role
+# @name createJudgeUser
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "judge-test-{{$guid}}@example.com",
+  "password": "{{testPassword}}",
+  "first_name": "Test",
+  "last_name": "Judge"
+}
+
+### Get the new user's ID
+@userId = {{createJudgeUser.response.body.$.id}}
+
+### Assign the judge role to the existing user
+# @name createJudge
+POST {{baseUrl}}/judges
+Content-Type: application/json
+Accept: application/json
+
+{
+  "user_id": {{userId}}
+}
+
+### Get the judge's ID (judges use users.id)
+@judgeId = {{createJudge.response.body.$.id}}
+
+### Get all judges
+# @name getJudges
+GET {{baseUrl}}/judges
+Accept: application/json
+
+### Get judge by ID
+# @name getJudgeById
+GET {{baseUrl}}/judges/{{judgeId}}
+Accept: application/json
+
+### Remove only the judge role (the user account remains)
+# @name deleteJudge
+DELETE {{baseUrl}}/judges/{{judgeId}}
+Accept: application/json
+
+### Verify that the judge role was removed (expected: 404)
+GET {{baseUrl}}/judges/{{judgeId}}
+Accept: application/json
+
+### Delete the test user account (requires the current password)
+DELETE {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "password": "{{testPassword}}"
+}
