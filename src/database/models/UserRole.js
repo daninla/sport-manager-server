@@ -2,19 +2,17 @@ export default (sequelize, DataTypes) => {
   const UserRole = sequelize.define(
     "UserRole",
     {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      title: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
       userId: {
         type: DataTypes.INTEGER,
+        primaryKey: true,
         allowNull: false,
         field: "user_id",
+      },
+      roleId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        field: "role_id",
       },
     },
     {
@@ -23,10 +21,9 @@ export default (sequelize, DataTypes) => {
     },
   );
 
-  UserRole.associate = ({ User }) => {
-    UserRole.belongsTo(User, {
-      foreignKey: "userId",
-    });
+  UserRole.associate = ({ User, Role }) => {
+    UserRole.belongsTo(User, { foreignKey: "userId" });
+    UserRole.belongsTo(Role, { foreignKey: "roleId" });
   };
 
   return UserRole;

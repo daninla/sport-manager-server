@@ -27,8 +27,8 @@ export default (sequelize, DataTypes) => {
     },
   );
 
-  Group.associate = ({ Player, GroupPlayer }) => {
-    Group.belongsToMany(Player, {
+  Group.associate = ({ User, GroupPlayer }) => {
+    Group.belongsToMany(User, {
       as: 'players',
       through: GroupPlayer,
       foreignKey: 'groupId',

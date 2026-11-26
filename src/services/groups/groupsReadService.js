@@ -1,11 +1,28 @@
 import { Op } from "sequelize";
 import db from "../../database/models/index.js";
 
-const { Group, GroupPlayer, Player, Registration } = db;
+const { Group, GroupPlayer, User, UserRole, Role, Registration } = db;
 
 const includePlayers = {
   association: "players",
   through: { attributes: [] },
+  attributes: ["id", "firstName", "lastName"],
+  required: false,
+  include: [
+    {
+      model: UserRole,
+      attributes: [],
+      include: [
+        {
+          model: Role,
+          attributes: [],
+          where: { title: "player" },
+          required: true,
+        },
+      ],
+      required: true,
+    },
+  ],
 };
 
 export const getGroupsWithPlayers = (tournamentId) =>
@@ -55,7 +72,32 @@ export const getAvailablePlayerIds = async (
   });
   const assignedIds = new Set(memberships.map(({ playerId }) => playerId));
 
-  return playerIds.filter((playerId) => !assignedIds.has(playerId));
+  const unassignedIds = playerIds.filter(
+    (playerId) => !assignedIds.has(playerId),
+  );
+  if (unassignedIds.length === 0) return [];
+
+  const users = await User.findAll({
+    attributes: ["id"],
+    where: { id: { [Op.in]: unassignedIds } },
+    include: [
+      {
+        model: UserRole,
+        attributes: [],
+        include: [
+          {
+            model: Role,
+            attributes: [],
+            where: { title: "player" },
+            required: true,
+          },
+        ],
+        required: true,
+      },
+    ],
+    transaction,
+  });
+  return users.map(({ id }) => id);
 };
 
 export const getUnassignedTournamentPlayers = async (tournamentId, groupId) => {
@@ -72,7 +114,8 @@ export const getUnassignedTournamentPlayers = async (tournamentId, groupId) => {
   const playerIds = await getAvailablePlayerIds(tournamentId, { groupId });
   if (playerIds.length === 0) return [];
 
-  return Player.findAll({
+  return User.findAll({
+    attributes: ["id", "firstName", "lastName"],
     where: { id: { [Op.in]: playerIds } },
     order: [["id", "ASC"]],
   });

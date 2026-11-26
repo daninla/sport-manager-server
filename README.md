@@ -1,16 +1,15 @@
 ## Sequelize group models
 
-`src/models/Group.js`, `GroupPlayer.js`, and `Player.js` map to the existing
-`groups`, `group_players`, and `players` tables. Their `associate(models)`
-methods define the many-to-many group/player relationship. No schema
-synchronization or table-creation migration is needed for the existing
-database.
+Models in `src/database/models` map groups and registrations to existing
+PostgreSQL tables. Participants are users linked to the `player` role in `roles` through
+`user_roles(user_id, role_id)`. Group assignments reference `users.id` through
+`group_players.player_id`. The groups API keeps the `players` and
+`playerIds` response and request fields used by the client.
 
 ## Club administration
 
-The server grants administrator access when `user_roles` contains a row with
-the user's ID in `user_id` and `title = 'admin'`. Other roles can coexist for the
-same user. Mount the project's authentication middleware before the API routes
+Administrator permissions use the `admin` entry in `roles`, linked to the
+user through `user_roles`. Other roles can coexist for the same user. Mount the project's authentication middleware before the API routes
 so it sets `req.user.id` from a verified identity. The browser's mock sign-in
 does not provide that identity. Requests without a verified ID receive 401.
 

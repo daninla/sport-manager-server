@@ -1,10 +1,11 @@
+import { Op } from "sequelize";
 import db from "../../database/models/index.js";
 import {
   getAvailablePlayerIds,
   getGroupByIdRecord,
 } from "./groupsReadService.js";
 
-const { Group, GroupPlayer, sequelize } = db;
+const { Group, GroupPlayer, UserRole, Role, sequelize } = db;
 
 const validateGroupCapacity = (capacity, playerCount, description) => {
   if (playerCount > capacity) {
@@ -18,6 +19,27 @@ const validateGroupCapacity = (capacity, playerCount, description) => {
 
 const addGroupPlayers = async (groupId, playerIds, transaction) => {
   if (playerIds.length === 0) return;
+
+  const roles = await UserRole.findAll({
+    attributes: ["userId"],
+    where: { userId: { [Op.in]: playerIds } },
+    include: [
+      {
+        model: Role,
+        attributes: [],
+        where: { title: "player" },
+        required: true,
+      },
+    ],
+    raw: true,
+    transaction,
+  });
+  const playerUserIds = new Set(roles.map(({ userId }) => String(userId)));
+  if (playerIds.some((id) => !playerUserIds.has(String(id)))) {
+    const err = new Error("All group participants must have the player role");
+    err.status = 400;
+    throw err;
+  }
 
   await GroupPlayer.bulkCreate(
     playerIds.map((playerId) => ({ groupId, playerId })),

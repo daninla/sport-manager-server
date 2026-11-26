@@ -21,12 +21,12 @@ export default (sequelize, DataTypes) => {
     },
   );
 
-  GroupPlayer.associate = ({ Group, Player }) => {
+  GroupPlayer.associate = ({ Group, User }) => {
     GroupPlayer.belongsTo(Group, {
       as: 'group',
       foreignKey: 'groupId',
     });
-    GroupPlayer.belongsTo(Player, {
+    GroupPlayer.belongsTo(User, {
       as: 'player',
       foreignKey: 'playerId',
     });

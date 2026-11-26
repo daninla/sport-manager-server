@@ -49,7 +49,13 @@ export default (sequelize, DataTypes) => {
         },
     );
 
-    User.associate = ({ UserRole }) => {
+    User.associate = ({ UserRole, Group, GroupPlayer }) => {
+        User.belongsToMany(Group, {
+            as: 'groups',
+            through: GroupPlayer,
+            foreignKey: 'playerId',
+            otherKey: 'groupId',
+        });
         User.hasMany(UserRole, {
             foreignKey: 'userId',
         });
